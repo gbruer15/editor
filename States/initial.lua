@@ -27,6 +27,8 @@ function state.load()
 	state.config.fontSize = 16
 
 	state.config.tabWidth = 4
+
+	state.config.smartIndent = true
 	-------------------------------------
 
 	state.textX = state.config.lineNumbers and state.windowX+20 or state.windowX+6
@@ -112,6 +114,14 @@ function state.keypressed(key)
 
 		state.cursor.line = state.cursor.line + 1
 		state.cursor.character = 1
+
+		if state.config.smartIndent then
+			 --match start of string to first non-tab character
+			local _,numStartTabs = state.lines[state.cursor.line-1]:find('^[\t]*')
+			state.lines[state.cursor.line] = string.rep('\t',numStartTabs) .. state.lines[state.cursor.line]
+			state.cursor.character = numStartTabs + 1
+		end
+		
 	elseif key == 'tab' then
 		state.textinput('\t')
 	elseif key == 'rctrl' or key == 'lctrl' then
