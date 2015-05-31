@@ -25,10 +25,14 @@ function state.load()
 	state.config.charWidth = 10
 
 	state.config.fontSize = 16
+
+	state.config.tabWidth = 4
 	-------------------------------------
 
 	state.textX = state.config.lineNumbers and state.windowX+20 or state.windowX+6
 	state.textY = state.windowY+5
+
+	state.tabString = string.rep(' ',state.config.tabWidth)
 
 end
 
@@ -46,7 +50,8 @@ function state.draw()
 	end
 
 	love.graphics.setColor(0,0,0)
-	state.cursor:draw(state.textX,state.textY, state.config.lineHeight,state.config.charWidth)
+	local _,numTabs = string.gsub(state.lines[state.cursor.line]:sub(1,state.cursor.character-1),'\t','')
+	state.cursor:draw(state.textX+ numTabs*state.config.charWidth*(#state.tabString-1),state.textY, state.config.lineHeight,state.config.charWidth)
 
 	love.graphics.setColor(255,255,0,100)
 	for i,v in pairs(state.lines) do
@@ -58,15 +63,17 @@ function state.draw()
 	love.graphics.setColor(0,0,0)
 	for i,v in pairs(state.lines) do
 		--love.graphics.print(v,state.textX,state.textY + state.config.lineHeight*(i-1))
-		for j=1,#v do
+		local l = v:gsub('\t',state.tabString)
+		for j=1,#l do
 			--love.graphics.print(v:sub(j,j),state.textX+(j-1)*state.config.charWidth,state.textY + state.config.lineHeight*(i-1))
-			love.graphics.printf(v:sub(j,j),state.textX+(j-1)*state.config.charWidth,state.textY + state.config.lineHeight*(i-1),state.config.charWidth,'center')
+			love.graphics.printf(l:sub(j,j),state.textX+(j-1)*state.config.charWidth,state.textY + state.config.lineHeight*(i-1),state.config.charWidth,'center')
 		end
 	end
 
 
 	love.graphics.setColor(200,0,0,100)
 	love.graphics.line(state.textX,state.textY,state.textX,state.textY+state.height-(state.textY-state.windowY))
+
 end
 
 
@@ -79,7 +86,7 @@ end
 function state.keypressed(key)
 	if key == 'backspace' then
 		if state.cursor.character > 1 then
-			state.lines[state.cursor.line] = string.remove(state.lines[state.cursor.line],state.cursor.character)
+			state.lines[state.cursor.line] = string.remove(state.lines[state.cursor.line],state.controlPressed and state.cursor.character -1 or state.cursor.character,state.cursor.character)
 		else
 			--remove current line to above line
 			if state.cursor.line > 1 then
@@ -105,6 +112,10 @@ function state.keypressed(key)
 
 		state.cursor.line = state.cursor.line + 1
 		state.cursor.character = 1
+	elseif key == 'tab' then
+		state.textinput('\t')
+	elseif key == 'rctrl' or key == 'lctrl' then
+		state.controlPressed = true
 	elseif key == 'up' then
 		state.cursor:moveUp(state.lines)
 	elseif key == 'down' then
@@ -116,7 +127,10 @@ function state.keypressed(key)
 	end
 end
 
-function state.keyreleased(k)
+function state.keyreleased(key)
+	if key == 'rctrl' or key == 'lctrl' then
+		state.controlPressed = love.keyboard.isDown('lctrl','rctrl')
+	end
 end
 
 
@@ -134,8 +148,9 @@ function string.insert(original, toInsert, pos)
 	return table.concat{original:sub(1,pos-1), toInsert, original:sub(pos)}
 end
 
-function string.remove(original, pos)
-	return table.concat{original:sub(1,pos-2),original:sub(pos)}
+function string.remove(original, startPos,endPos)
+	endPos = endPos or startPos
+	return table.concat{original:sub(1,startPos-2),original:sub(endPos)}
 end
 
 return state
