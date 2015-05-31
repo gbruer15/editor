@@ -27,6 +27,7 @@ function state.load()
 	state.config.fontSize = 16
 
 	state.config.tabWidth = 4
+	state.config.tabsToSpaces = true
 
 	state.config.smartIndent = true
 	-------------------------------------
@@ -82,7 +83,7 @@ end
 
 function state.textinput(text)
 	state.lines[state.cursor.line] = string.insert(state.lines[state.cursor.line],text,state.cursor.character)
-	state.cursor.character = state.cursor.character + 1
+	state.cursor.character = state.cursor.character + #text
 end
 
 function state.keypressed(key)
@@ -116,14 +117,27 @@ function state.keypressed(key)
 		state.cursor.character = 1
 
 		if state.config.smartIndent then
-			 --match start of string to first non-tab character
-			local _,numStartTabs = state.lines[state.cursor.line-1]:find('^[\t]*')
-			state.lines[state.cursor.line] = string.rep('\t',numStartTabs) .. state.lines[state.cursor.line]
-			state.cursor.character = numStartTabs + 1
+			if not state.config.tabsToSpaces then
+				--match start of string to first non-tab character
+				local _,numStartTabs = state.lines[state.cursor.line-1]:find('^[\t]*')
+				state.lines[state.cursor.line] = string.rep('\t',numStartTabs) .. state.lines[state.cursor.line]
+				state.cursor.character = numStartTabs + 1
+			else
+				--match start of string to first non-tab character
+				local _,numStartSpaces = state.lines[state.cursor.line-1]:find('^[%s]*')
+				print(numStartSpaces)
+				local numStartTabs = math.floor(numStartSpaces/state.config.tabWidth)
+				state.lines[state.cursor.line] = string.rep(state.tabString,numStartTabs) .. state.lines[state.cursor.line]
+				state.cursor.character = numStartSpaces + 1
+			end
 		end
 		
 	elseif key == 'tab' then
-		state.textinput('\t')
+		if state.config.tabsToSpaces then
+			state.textinput(state.tabString)
+		else
+			state.textinput('\t')
+		end
 	elseif key == 'rctrl' or key == 'lctrl' then
 		state.controlPressed = true
 	elseif key == 'up' then
