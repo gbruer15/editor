@@ -57,7 +57,7 @@ function love.load()
 	MOUSE = {}
 	MOUSE.x, MOUSE.y = love.mouse.getPosition()
 
-	STATE = require('States/initial') --require("Game/States/game")
+	STATE = require('States/editor') --require("Game/States/game")
 	STATE.load()
 	--resources.load()
 	--music.fight.music:play()
@@ -88,14 +88,6 @@ end
 
 function love.draw()
 	STATE.draw()
-
-
-
-
-
-
-
-
 	--[[
 	states[state].draw()	
 

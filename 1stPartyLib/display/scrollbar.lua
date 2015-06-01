@@ -14,6 +14,7 @@ function scrollbar.make(att)
 	self.boxSize[2] = att.boxHeight or 10
 
 	self.type = att.type == 'horizontal' and 1 or 2
+	self.notType = self.type == 1 and 2 or 1
 
 	self.viewSize = att.viewSize or self.boxSize[self.type]
 
@@ -26,15 +27,15 @@ function scrollbar.make(att)
 
 	self.handleSize = {}
 	self.handleSize[self.type] = math.constrain(self.boxSize[self.type]/self.contentSize * self.viewSize,self.minHandleSize,self.boxSize[self.type])
-	self.handleSize[self.type==1 and 2 or 1] = self.boxSize[self.type==1 and 2 or 1]*0.9
+	self.handleSize[self.notType] = self.boxSize[self.notType]*0.7
 
 	self.minHandlePosition = self.boxPos[self.type]
 	self.maxHandlePosition = self.boxPos[self.type]+ self.maxScrollPosition * self.boxSize[self.type]/self.contentSize
 	self.handlePosition = {}
+
 	self:setHandlefromScroll()
 	
-
-	self.handlePosition[self.type==1 and 2 or 1] = self.boxPos[self.type==1 and 2 or 1]
+	self.handlePosition[self.notType] = self.boxPos[self.notType] + (self.boxSize[self.notType] - self.handleSize[self.notType])/2
 
 
 	return self
