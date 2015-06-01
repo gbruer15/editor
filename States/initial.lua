@@ -23,6 +23,12 @@ function state.load()
 
 	state.lines = {"hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not"}
 
+	state.selection = {}
+	state.selection.startCharacter = 1
+	state.selection.startLine = 1
+	state.selection.endCharacter = 1
+	state.selection.endLine = 1
+	state.selection.selected = false
 	------Config Stuff------------------
 	state.config = {}
 
@@ -61,6 +67,21 @@ function state.update(dt)
 
 	state.hoverCharacter = math.ceil( (MOUSE.x-state.textX-state.config.charWidth/2)  /state.config.charWidth)+1
 	state.hoverLine = math.ceil( (MOUSE.y-state.textY+state.verticalScrollbar.scrollPosition)  /state.config.lineHeight)
+
+	if state.selection.selecting then
+		--state.selection.endLine = math.constrain(state.hoverLine,1,#state.lines)
+		--state.selection.endCharacter = math.constrain(state.hoverCharacter,0,#state.lines[state.selection.endLine])
+
+		state.cursor:setPosition(state.hoverLine,state.hoverCharacter,state.lines)
+
+		state.selection.endCharacter = state.cursor.character
+		state.selection.endLine = state.cursor.line
+
+		state.selection.selected = state.selection.endCharacter ~= state.selection.startCharacter
+									or state.selection.startLine ~= state.selection.endLine
+
+		state.scrollToCursorSlow(state.config.lineHeight*3*dt)
+	end
 end
 
 function state.draw()
@@ -95,6 +116,34 @@ function state.draw()
 			state.textX,save = save,nil
 		end
 
+		
+		if state.selection.selected then
+			love.graphics.setColor(255,255,0,100)
+
+			if state.selection.startLine == state.selection.endLine then
+				local width = (state.selection.endCharacter-state.selection.startCharacter)*state.config.charWidth
+				love.graphics.rectangle('fill',state.textX+state.selection.startCharacter*state.config.charWidth,state.textY + state.config.lineHeight*(state.selection.startLine-1),width,state.config.lineHeight)
+			else
+				--highlight first line
+				local width = (#state.lines[state.selection.startLine]-state.selection.startCharacter)*state.config.charWidth
+				love.graphics.rectangle('fill',state.textX+state.selection.startCharacter*state.config.charWidth,state.textY + state.config.lineHeight*(state.selection.startLine-1),width,state.config.lineHeight)
+
+				--highlight last line
+				local width = (state.selection.endCharacter-1)*state.config.charWidth
+				love.graphics.rectangle('fill',state.textX,state.textY + state.config.lineHeight*(state.selection.endLine-1),width,state.config.lineHeight)
+				--highlight lines in between
+				if state.selection.startLine<state.selection.endLine then
+					for i=state.selection.startLine+1,state.selection.endLine-1 do					
+						love.graphics.rectangle('fill',state.textX,state.textY + state.config.lineHeight*(i-1),(#state.lines[i])*state.config.charWidth,state.config.lineHeight)
+					end
+				else
+					for i=state.selection.endLine+1,state.selection.startLine-1 do					
+						love.graphics.rectangle('fill',state.textX,state.textY + state.config.lineHeight*(i-1),(#state.lines[i])*state.config.charWidth,state.config.lineHeight)
+					end
+				end
+			end
+		end
+
 		love.graphics.setColor(0,0,0)
 		for i,v in pairs(state.lines) do
 			--love.graphics.print(v,state.textX,state.textY + state.config.lineHeight*(i-1))
@@ -110,6 +159,12 @@ function state.draw()
 
 	love.graphics.setColor(200,0,0,100)
 	love.graphics.line(state.textX,state.textY,state.textX,state.textY+state.height-(state.textY-state.windowY))
+
+	love.graphics.setColor(200,255,0)
+	love.graphics.print('StartC: ' .. state.selection.startCharacter,700,0)
+	love.graphics.print('StartL: ' .. state.selection.startLine,700,15)
+	love.graphics.print('EndC: ' .. state.selection.endCharacter,700,30)
+	love.graphics.print('EndL: ' .. state.selection.endLine,700,45)
 
 end
 
@@ -189,6 +244,16 @@ function state.keypressed(key)
 	elseif key =='right' then
 		state.cursor:moveForward(state.lines)
 		state.scrollToCursor()
+	elseif state.controlPressed then
+		if key == 'c' then
+			love.system.setClipboardText(state.getString(state.selection.startCharacter
+														,state.selection.startLine
+														,state.selection.endCharacter
+														,state.selection.endLine)
+											)
+		elseif key == 'v' then
+			state.insertLines(love.system.getClipboardText(),state.cursor.character,state.cursor.line)
+		end
 	end
 end
 
@@ -205,6 +270,12 @@ function state.mousepressed(x,y,b)
 			return
 		else
 			state.cursor:setPosition(state.hoverLine,state.hoverCharacter,state.lines)
+			
+			state.selection.startCharacter = state.cursor.character
+			state.selection.startLine = state.cursor.line
+			state.selection.endCharacter = state.cursor.character
+			state.selection.endLine = state.cursor.line
+			state.selection.selecting = true
 		end
 	elseif b == 'wd' then
 		state.verticalScrollbar:setScrollPosition(state.verticalScrollbar.scrollPosition+state.config.scrollAmount)
@@ -216,6 +287,8 @@ end
 
 function state.mousereleased(x,y,b)
 	state.verticalScrollbar:mousereleased(x,y,b)
+
+	state.selection.selecting = false
 end
 
 function state.addLine(line,s)
@@ -237,8 +310,52 @@ function state.scrollToCursor()
 	end
 end
 
+function state.scrollToCursorSlow(amount)
+	local cursorY = (state.cursor.line-1)*state.config.lineHeight
+	if cursorY < state.verticalScrollbar.scrollPosition then
+		state.verticalScrollbar:setScrollPosition(state.verticalScrollbar.scrollPosition - amount)
+	elseif cursorY > state.verticalScrollbar.scrollPosition+state.textHeight then
+		state.verticalScrollbar:setScrollPosition(cursorY - state.textHeight+amount)
+	end
+end
 
+function state.getString(startC,startL,endC,endL)
+	if not startC and not startL then
+		return table.concat(state.lines,'\n')
+	end
 
+	endC = endC or (endL and #state.lines[endL]) or #state.lines[#state.lines]
+	endL = endL or (endC and startL) or #state.lines  
+	local strings = {}
+
+	strings[1] = state.lines[startL]:sub(startC)
+	for i=startL+1,endL-1 do
+		table.insert(strings,state.lines[i])
+	end
+	table.insert(strings,state.lines[endL]:sub(1,endL))
+
+	return table.concat(strings,'\n')
+end
+
+function state.insertLines(toInsert,startC,startL)
+	local char = startC
+	local lineNumber = startL
+
+	local strings = string.split(toInsert,'\n')
+	state.lines[startL] = state.lines[startL] .. strings[1]
+	for i=2,#strings do
+		table.insert(state.lines,startL+i-1,strings[i])
+	end
+end
+
+function string.split(s, charDelimiter)
+	local strings = {}
+	charDelimiter =charDelimiter or '%s'
+	for line in string.gmatch(s,'[^'..charDelimiter..']+' ) do 
+		table.insert(strings,line)
+	end
+	return strings
+end
 function string.insert(original, toInsert, pos)
 	return table.concat{original:sub(1,pos-1), toInsert, original:sub(pos)}
 end

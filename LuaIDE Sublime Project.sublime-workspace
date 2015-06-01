@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"Startl",
+				"startLine"
+			],
+			[
+				"setHan",
+				"setScrollFromHandle"
+			],
+			[
+				"handleposi",
+				"maxHandlePosition"
+			],
+			[
+				"scroll",
+				"scrollPosition"
+			],
+			[
+				"hover",
+				"hoverChar"
+			],
+			[
+				"text",
+				"textinput"
+			],
+			[
+				"ca",
+				"charWidth"
+			],
+			[
 				"x",
 				"x"
 			],
@@ -83,6 +111,56 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "LuaIDE Sublime Project.sublime-project",
+			"settings":
+			{
+				"buffer_size": 538,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "main.lua",
+			"settings":
+			{
+				"buffer_size": 6099,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "States/initial.lua",
+			"settings":
+			{
+				"buffer_size": 13808,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "1stPartyLib/display/cursor.lua",
+			"settings":
+			{
+				"buffer_size": 1617,
+				"line_ending": "Windows",
+				"name": "local cursor = {}"
+			}
+		},
+		{
+			"file": "1stPartyLib/display/scrollbar.lua",
+			"settings":
+			{
+				"buffer_size": 3545,
+				"line_ending": "Windows",
+				"name": "local scrollbar = {}"
+			}
+		},
+		{
+			"file": "1stPartyLib/utilities/math.lua",
+			"settings":
+			{
+				"buffer_size": 359,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "Linux Love2d 9.0",
 	"command_palette":
@@ -108,6 +186,9 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Grant/scm/LuaIDE/debug.lua",
+		"/C/Users/Grant/scm/LuaIDE/1stPartyLib/display/loveGraphicsOverride.lua",
+		"/C/Users/Grant/scm/LuaIDE/1stPartyLib/display/camera.lua",
 		"/C/Users/Grant/scm/SpaceSurvivorsRepo/Love Space Survivor/Game/States/levelselect.lua",
 		"/C/Users/Grant/scm/SpaceSurvivorsRepo/Love Space Survivor/Game/States/titlemenu.lua",
 		"/C/Users/Grant/scm/SpaceSurvivorsRepo/Love Space Survivor/Levels/level1.lua",
@@ -171,9 +252,17 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": false,
+		"case_sensitive": true,
 		"find_history":
 		[
+			"state.scrollbar",
+			"maxHandlePosition",
+			"setHandlefromScroll",
+			"scrollPos",
+			"handlePos",
+			"state.cursor",
+			"state.lines",
+			"state.cursor",
 			"upgrade",
 			"state.camera",
 			"y",
@@ -204,6 +293,11 @@
 		"regex": false,
 		"replace_history":
 		[
+			"state.verticalScrollbar",
+			"handlePosition",
+			"self",
+			"lines",
+			"self",
 			"window",
 			"STATE"
 		],
@@ -216,8 +310,170 @@
 	"groups":
 	[
 		{
+			"selected": 2,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "LuaIDE Sublime Project.sublime-project",
+					"settings":
+					{
+						"buffer_size": 538,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								359,
+								359
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 171.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "main.lua",
+					"settings":
+					{
+						"buffer_size": 6099,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1256,
+								1256
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 627.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "States/initial.lua",
+					"settings":
+					{
+						"buffer_size": 13808,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13430,
+								13430
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 7003.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "1stPartyLib/display/cursor.lua",
+					"settings":
+					{
+						"buffer_size": 1617,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1060,
+								1060
+							]
+						],
+						"settings":
+						{
+							"auto_name": "local cursor = {}",
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 741.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "1stPartyLib/display/scrollbar.lua",
+					"settings":
+					{
+						"buffer_size": 3545,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2914,
+								2914
+							]
+						],
+						"settings":
+						{
+							"auto_name": "local scrollbar = {}",
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1574.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "1stPartyLib/utilities/math.lua",
+					"settings":
+					{
+						"buffer_size": 359,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								313,
+								313
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -254,7 +510,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 154.0
+		"height": 98.0
 	},
 	"replace":
 	{
@@ -281,6 +537,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 150.0,
+	"side_bar_width": 213.0,
 	"status_bar_visible": true
 }
