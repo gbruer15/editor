@@ -52,7 +52,7 @@ end
 
 function cursor:moveUp(lines)
 	if self.line > 1 then
-		self.line = self.line - 1
+		 self.line = self.line - 1
 		self.character = math.min(self.character,#lines[self.line]+1)
 	end
 	self.flash = 0
@@ -64,6 +64,11 @@ function cursor:moveDown(lines)
 		self.character = math.min(self.character,#lines[self.line]+1)
 	end
 	self.flash = 0
+end
+
+function cursor:setPosition(line,character,lines)
+	self.line = math.min(#lines,math.max(line,1))
+	self.character = math.min(#lines[self.line]+1,math.max(character,1))
 end
 
 return cursor

@@ -37,7 +37,8 @@ LUA_PATH, path = "?;?.lua",LUA_PATH
 --requireDirectory("lib", true)
 LUA_PATH, path = path, LUA_PATH
 
-
+require('debug')
+require('1stPartyLib/utilities/math')
 function love.load()
 	IMAGES_PATH = 'Assets/Images/'
 	lovefunctions = {'keypressed','keyreleased','mousepressed','mousereleased'}
