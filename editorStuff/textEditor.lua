@@ -28,9 +28,9 @@ function textEditor.make(att)
 	--self.lines = {"hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not"}
 	self.lines = {}
 	--local file = io.open('C:\\Users\\Grant\\scm\\LuaIDE\\debug.lua')
-	for line in io.lines('C:\\Users\\Grant\\scm\\SpaceSurvivorsRepo\\Python Space Survivor\\gamel.py') do 
+	--for line in io.lines('C:\\Users\\Grant\\scm\\SpaceSurvivorsRepo\\Python Space Survivor\\gamel.py') do 
 		--table.insert(self.lines,line) 
-	end
+	--end
 	for line in io.lines('C:/Users/Grant/scm/SpaceSurvivorsRepo/Python Space Survivor/gamel.py') do 
 		table.insert(self.lines,line) 
 	end
@@ -74,9 +74,7 @@ end
 
 function textEditor:update(dt)
 	self.cursor:update(dt)
-	self.verticalScrollbar:update(dt)
-
-	
+	self.verticalScrollbar:update(dt)	
 
 	self.hoverCharacter = math.ceil( (MOUSE.x-self.textX-self.config.charWidth/2)  /self.config.charWidth)+1
 	self.hoverLine = math.ceil( (MOUSE.y-self.textY+self.verticalScrollbar.scrollPosition)  /self.config.lineHeight)
@@ -271,6 +269,8 @@ function textEditor:keypressed(key)
 			self:insertLines(love.system.getClipboardText(),self.cursor.character,self.cursor.line)
 		elseif key == 's' then
 			self:saveFile()
+		elseif key == 'o' then
+			self:openFileDialog()
 		end
 	end
 end
@@ -381,6 +381,9 @@ function textEditor:saveFile()
 	file:close()
 end
 
+function textEditor:openFileDialog()
+	os.execute('start love ../FileDialog')
+end
 
 
 

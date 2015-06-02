@@ -9,15 +9,6 @@
 			],
 			"shell": true,
 			"name": "Linux Love2d 9.0"
-		},
-		{
-			"cmd":
-			[
-				"love",
-				"$project_path/FileDialog"
-			],
-			"shell": true,
-			"name": "Build FileDialog Love2d 9.0"
 		}
 	],
 	"folders":
