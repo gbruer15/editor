@@ -7,7 +7,7 @@ love.graphics.setColor(10,210,150)
 love.graphics.rectangle("fill",25,25,100,15)
 
 love.graphics.setColor(0,0,0)
-love.graphics.printf("Loading IDE",25,26,100,'center')
+love.graphics.printf("Loading Editor",25,26,100,'center')
 	
 love.graphics.present()
 	

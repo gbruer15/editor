@@ -27,11 +27,7 @@ function textEditor.make(att)
 
 	--self.lines = {"hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not","hellow evewj","Its nice","","not"}
 	self.lines = {}
-	--local file = io.open('C:\\Users\\Grant\\scm\\LuaIDE\\debug.lua')
-	--for line in io.lines('C:\\Users\\Grant\\scm\\SpaceSurvivorsRepo\\Python Space Survivor\\gamel.py') do 
-		--table.insert(self.lines,line) 
-	--end
-	for line in io.lines('C:/Users/Grant/scm/SpaceSurvivorsRepo/Python Space Survivor/gamel.py') do 
+	for line in io.lines('main.lua') do 
 		table.insert(self.lines,line) 
 	end
 	self.selection = {}
@@ -375,7 +371,7 @@ function textEditor:insertLines(toInsert,startC,startL)
 end
 
 function textEditor:saveFile()
-	local file = io.open('C:\\Users\\Grant\\scm\\LuaIDE\\testWrite.text','w')
+	local file = io.open('testWrite.text','w')
 
 	file:write(table.concat(self.lines,'\n'))
 	file:close()
